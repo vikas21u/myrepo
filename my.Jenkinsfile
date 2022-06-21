@@ -2,11 +2,7 @@ pipeline {
 
     agent any
        options {
-        office365ConnectorWebhooks([[
-            name: 'Office 365',
-            startNotification: true,
-            url: 'https://automationanywhere1.webhook.office.com/webhookb2/270476cd-c12b-441c-bea4-f23efe029187@f03022ed-34ea-4c8f-91cb-9abee0a20907/IncomingWebhook/a4229773c440496394ebedf498121199/1d452f31-e9db-45c5-85b8-a0d2b62b1adf'
-        ]])
+        teams_notification()
     }
     stages {
         stage('Init') {
@@ -18,9 +14,14 @@ pipeline {
     }
     post {
         success {
-            office365ConnectorSend webhookUrl: 'https://automationanywhere1.webhook.office.com/webhookb2/270476cd-c12b-441c-bea4-f23efe029187@f03022ed-34ea-4c8f-91cb-9abee0a20907/IncomingWebhook/a4229773c440496394ebedf498121199/1d452f31-e9db-45c5-85b8-a0d2b62b1adf',
-            message: 'Application has been [deployed](https://uat.green.biz)',
-            status: 'Success'
+            teams_notification('Upgrade is successful')
             }
         }            
 }
+def teams_notification() {
+       office365ConnectorSend webhookUrl: "https://outlook.office.com/webhook/123456...",
+                factDefinitions: [[name: "environment", template: "stage-ee"],
+                                  [name: "release_name", template: "1111.1.1."]]
+}
+
+
