@@ -12,7 +12,9 @@ pipeline {
     }
     post {
         success {
-            teams_notification('Upgrade is successful')
+            office365ConnectorSend webhookUrl: 'https://outlook.office.com/webhook/123456...',
+            message: 'Application has been [deployed](https://uat.green.biz)',
+            status: 'Success'
             }
         }            
 }
